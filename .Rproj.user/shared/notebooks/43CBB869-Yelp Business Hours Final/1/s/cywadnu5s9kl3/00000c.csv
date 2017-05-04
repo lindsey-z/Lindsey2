@@ -1,0 +1,3 @@
+"0","complete <- yelp_business[complete.cases(yelp_business[,4]),]"
+"0","super <- as.data.frame(cbind(unlist(finally), complete$stars))"
+"0","plot(super[,1], super[,2])"

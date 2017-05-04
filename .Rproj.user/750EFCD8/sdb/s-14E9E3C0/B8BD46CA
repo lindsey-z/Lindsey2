@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "---\ntitle: \"Yelp predict hours\"\noutput: word_document\n---\n\n```{r}\nlibrary(readr)\n\nhours <- read_csv(\"~/Downloads/business_hours.jpg\")\nyelp_business <- suppressWarnings(read_csv(\"~/Desktop/yelp_academic_dataset_business_train.csv\"))\n```\n\n```{r}\nget_categories <- function(t){\n  x <- filter(yelp_business, business_id == t)\n  return(x$categories)\n}\nmatrix <- sapply(hours$business_id, get_categories)\n\ndata <- cbind(hours,categories = matrix)\ndata2 <- data[,c(3,4)]\n```\n\nclean data2 categories\n\n```{r}\nattrib1 <- gsub(\"\\\\[|\\\\]\", \"\", data2[,2])\n\nattrib2 <- gsub(\"'\", '', attrib1)\n\nattrib3 <- strsplit(attrib2, \",\")\nattrib4 <- matrix(unlist(attrib3), ncol = 2, byrow = TRUE)\n\ntrim.leading <- function (x)  sub(\"^\\\\s+\", \"\", x)\nattrib5 <- trim.leading(attrib4[,2])\n\nfinal <- cbind(attrib4[,1], V2 = attrib5)\n\nfinal2 <- paste(final[,1],final[,2])\nfinal3 <- sub(\"\\\\s+Restaurants\", \"\", final2)\nfinal4 <- sub(\"Restaurants\\\\s+\", \"\", final3)\nfinal5 <- sub(\"\\\\s+Food\", \"\", final4)\nfinal6 <- sub(\"Food\\\\s+\", \"\", final5)\n\nwew <- as.matrix(cbind(data2[,1], final6))\nnew <- as.numeric(wew[,1])\nfinally <- cbind.data.frame(hours = new, categories = wew[,2])\n\ndummies <- as.matrix(model.matrix(~finally[,2]))\ncontrasts(finally[,2])\n\n#unique(finally$categories)\nlibrary(randomForest)\n\nset.seed(12)\nfinally2 <- cbind(hours = finally[,1], dummies[,-1])\ncolnames(finally2) <- c(\"hours\", \"coffee_tea\", \"mexican\", \"pizza\")\nfit <- randomForest(hours~., data = finally2, mtry = 2, importance = TRUE)\n\n```\n\n\n```{r}\nmissing <- yelp_business[is.na(yelp_business$hours),]\nmissing2 <- missing[,c(3,4,8)]\n\ndur <- as.matrix(unlist(missing2[,3]))\nattrib1 <- gsub(\"\\\\[|\\\\]\", \"\", dur)\n\n\nattrib2 <- gsub(\"'\", '', attrib1)\n\nattrib3 <- strsplit(attrib2, \",\")\nattrib4 <- matrix(unlist(attrib3), ncol = 2, byrow = TRUE)\n\ntrim.leading <- function (x)  sub(\"^\\\\s+\", \"\", x)\nattrib5 <- trim.leading(attrib4[,2])\n\nfinal <- cbind(attrib4[,1], V2 = attrib5)\n\nfinal2 <- paste(final[,1],final[,2])\nfinal3 <- sub(\"\\\\s+Restaurants\", \"\", final2)\nfinal4 <- sub(\"Restaurants\\\\s+\", \"\", final3)\nfinal5 <- sub(\"\\\\s+Food\", \"\", final4)\nfinal6 <- sub(\"Food\\\\s+\", \"\", final5)\n\nokay <- cbind(missing2[,c(1,2)], final6)\n\nokay1 <- predict(fit, okay$final6)\n```\n\n```{r}\ntest_business <- read_csv(\"~/Desktop/yelp_academic_dataset_business_test.csv\", col_names = TRUE)\n```\n\n```{r}\nmissing <- test_business[is.na(test_business$hours),]\nmissing2 <- missing[,c(4,9)]\n\ndur <- as.matrix(unlist(missing2[,2]))\nattrib1 <- gsub(\"\\\\[|\\\\]\", \"\", dur)\n\n\nattrib2 <- gsub(\"'\", '', attrib1)\n\nattrib3 <- strsplit(attrib2, \",\")\nattrib4 <- matrix(unlist(attrib3), ncol = 2, byrow = TRUE)\n\ntrim.leading <- function (x)  sub(\"^\\\\s+\", \"\", x)\nattrib5 <- trim.leading(attrib4[,2])\n\nfinal <- cbind(attrib4[,1], V2 = attrib5)\n\nfinal2 <- paste(final[,1],final[,2])\nfinal3 <- sub(\"\\\\s+Restaurants\", \"\", final2)\nfinal4 <- sub(\"Restaurants\\\\s+\", \"\", final3)\nfinal5 <- sub(\"\\\\s+Food\", \"\", final4)\nfinal6 <- sub(\"Food\\\\s+\", \"\", final5)\n\nokay <- cbind(missing2[,1], final6)\n\ndummies <- as.matrix(model.matrix(~okay[,2]))\nfinally2 <- cbind.data.frame(hours = okay[,1], dummies[,-1])\ncolnames(finally2) <- c(\"business_id\", \"coffee_tea\", \"mexican\", \"pizza\")\n\nokay1 <- predict(fit, finally2[,-1])\n\nweew <- cbind.data.frame(business_id = finally2[,1], hours = okay1)\n\nwrite_csv(weew, \"test_business_pred_hours.csv\")\n\n```\n\n\n\n\n\n\n",
+    "created" : 1493842429546.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1861162745",
+    "id" : "B8BD46CA",
+    "lastKnownWriteTime" : 1493845719,
+    "last_content_update" : 1493845719705,
+    "path" : "~/Desktop/154/Yelp_predict_hours.Rmd",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

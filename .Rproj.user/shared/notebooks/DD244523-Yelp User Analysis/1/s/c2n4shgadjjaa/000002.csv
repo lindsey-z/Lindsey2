@@ -1,0 +1,3 @@
+"0","lm_pred_test <- predict(lm_fit, test)"
+"2","prediction from a rank-deficient fit may be misleading"
+"0","plot(lm_pred_test - test[,1])"

@@ -1,0 +1,4 @@
+"0","library(stringr)"
+"0","hours <- yelp_business$hours"
+"0","day_count <- str_count(hours, ""day"")"
+"0","combined <- cbind(yelp_business$business_id, hours, day_count)"

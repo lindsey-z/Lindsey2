@@ -1,0 +1,5 @@
+"0","get_mse <- function(estimate, truth) {"
+"0","  mean((estimate - truth) ^ 2)"
+"0","}"
+"0","train <- sample(length(sub_user$accuracy), 70000)"
+"0","test <- sub_user[-train,]"

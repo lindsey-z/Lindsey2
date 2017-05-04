@@ -1,0 +1,18 @@
+"0","get_categories <- function(t){"
+"0","  x <- filter(yelp_business, business_id == t)"
+"0","  return(x$categories)"
+"0","}"
+"0","matrix <- sapply(hours$business_id, get_categories)"
+"2","NAs introduced by coercion"
+"2","NAs introduced by coercion"
+"2","NAs introduced by coercion"
+"2","NAs introduced by coercion"
+"2","NAs introduced by coercion"
+"2","NAs introduced by coercion"
+"2","NAs introduced by coercion"
+"2","NAs introduced by coercion"
+"2","NAs introduced by coercion"
+"2","NAs introduced by coercion"
+"2","Error in filter(yelp_business, business_id == t) : 
+  object 'business_id' not found
+"

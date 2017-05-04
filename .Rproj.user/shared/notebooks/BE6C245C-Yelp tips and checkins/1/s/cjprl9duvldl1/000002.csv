@@ -1,0 +1,22 @@
+"0","suppressWarnings(library(readr))"
+"0","yelp_tip <- suppressWarnings(read_csv(""~/Desktop/yelp_academic_dataset_tip.csv""))"
+"2","Parsed with column specification:
+cols(
+  X1 = col_integer(),
+  user_id = col_character(),
+  text = col_character(),
+  business_id = col_character(),
+  likes = col_integer(),
+  date = col_date(format = """"),
+  type = col_character()
+)
+"
+"0","yelp_checkin <- suppressWarnings(read_csv(""~/Desktop/yelp_academic_dataset_checkin.csv""))"
+"2","Parsed with column specification:
+cols(
+  X1 = col_integer(),
+  time = col_character(),
+  type = col_character(),
+  business_id = col_character()
+)
+"

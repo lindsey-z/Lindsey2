@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "---\ntitle: \"Yelp User Analysis\"\nauthor: \"Lindsey Zhang\"\ndate: \"4/18/2017\"\noutput: word_document\n---\nFind user rating accuracy\n\n```{r}\nsuppressWarnings(library(readr))\n\nyelp_user <- suppressWarnings(read_csv(\"~/Desktop/yelp_academic_dataset_user.csv\"))\n\nyelp_business <- suppressWarnings(read_csv(\"~/Desktop/yelp_academic_dataset_business_train.csv\"))\n\nyelp_review <- suppressWarnings(read_csv(\"~/Desktop/yelp_academic_dataset_review_train.csv\"))\n```\n\n```{r}\ntest_business <- read_csv(\"~/Desktop/yelp_academic_dataset_business_test.csv\", col_names = TRUE)\ntest_review <- read_csv(\"~/Desktop/yelp_academic_dataset_review_test.csv\")\n```\n\n\n```{r}\nsuppressWarnings(library(dplyr))\n\n#yelp_user <- yelp_user[1:5000,]\nget_certain_bus_stars <- function(users_business){\n  x <- filter(yelp_business, business_id == users_business)\n  return(x$stars)\n}\n\nget_user_accuracy <- function(user){\n  x <- filter(yelp_review, user_id == user)\n  bus_id <- x$business_id\n  review_stars <- x$stars\n  bus_stars <- as.data.frame(sapply(bus_id,get_certain_bus_stars))\n  difference <- abs(review_stars-bus_stars$`sapply(bus_id, get_certain_bus_stars)`)\n  average <- sum(difference)/length(difference)\n  return(average)\n}\n\nuser_accuracy <- as.data.frame(sapply(yelp_user$user_id, get_user_accuracy))\n\ncombined <- cbind(user_accuracy$`sapply(yelp_user$user_id, get_user_accuracy)`, yelp_user)\ncolnames(combined)[1] <- \"accuracy\"\nlibrary(data.table)\n\n\nfinal_user_acc <- setDT(user_accuracy, keep.rownames = TRUE)[]\ncolnames(final_user_acc) <- c(\"user_id\", \"accuracy\")\nwrite.csv(final_user_acc, file = \"user_accuracy\")\n\n```\n\nKeep only numeric variables. Remove NaN values.\n```{r}\n#use only numeric\n#get_elite <- function(user){\n#  length(complete_user$user[10])\n#}\n#user_elite <- sapply(yelp_user$user_id, get_elite)\nlibrary(stringr)\n\nelite_count <- str_count(combined$elite, \"20\")\nfriend_count <- (str_count(combined$friends, \"'\")/2)\ncombined$present_day <- as.Date(rep(\"2017-04-22\", length(combined$yelping_since)), format=\"%Y-%m-%d\")\nday_count <- combined$present_day - as.Date(as.character(combined$yelping_since), format=\"%Y-%m-%d\")\n\ncomplete_user <- cbind(combined, elite_count, friend_count, day_count)\n\nsub_user <- complete_user[complete.cases(complete_user),-c(2,3,10,12,18,20,23,26)]\n\n\n```\n\n```{r}\nget_mse <- function(estimate, truth) {\n  mean((estimate - truth) ^ 2)\n}\n\ntrain <- sample(length(sub_user$accuracy), 70000)\ntest <- sub_user[-train,]\n```\n\n```{r}\nlm_fit <- lm(accuracy~., data = sub_user, subset = train)\nsummary(lm_fit)\n\nplot(lm_fit$residuals)\n```\n\n```{r}\nlm_pred_test <- predict(lm_fit, test)\nplot(lm_pred_test - test[,1])\nget_mse(lm_pred_test, test[,1])\n```\n\n```{r}\nlibrary(glmnet)\nexplan <- matrix(unlist(sub_user[,-1]), ncol = 20)\nresponse <- sub_user[,1]\n\nridge <- cv.glmnet(explan[train,], response[train], alpha = 0)\nplot(ridge$glmnet.fit)\nplot(ridge)\nridge$lambda.min\n\nridge_pred <- predict(ridge, explan[-train,], s = ridge$lambda.min)\nget_mse(ridge_pred, response[-train])\n\ncoef(ridge)\n```\n\n```{r}\nlasso <- cv.glmnet(explan[train,], response[train], alpha=1)\nplot(lasso$glmnet.fit)\nplot(lasso)\n\nlasso$lambda.min\n\nlasso_pred <- predict(lasso, explan[-train,], s = lasso$lambda.min)\nget_mse(lasso_pred, response[-train])\ncoef(lasso)\n```\n\n\n\n\n\n\n\n\n\n",
+    "created" : 1493842500541.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3472385275",
+    "id" : "95BDA07D",
+    "lastKnownWriteTime" : 1493688931,
+    "last_content_update" : 1493688931,
+    "path" : "~/Desktop/154/Yelp User Analysis.Rmd",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

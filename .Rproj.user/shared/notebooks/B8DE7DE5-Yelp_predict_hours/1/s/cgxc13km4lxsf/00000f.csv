@@ -1,0 +1,5 @@
+"0","okay1 <- predict(okay$final6, fit)
+"
+"2","Error in UseMethod(""predict"") : 
+  no applicable method for 'predict' applied to an object of class ""factor""
+"

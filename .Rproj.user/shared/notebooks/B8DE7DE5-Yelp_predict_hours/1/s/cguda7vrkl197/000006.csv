@@ -1,0 +1,33 @@
+"0","library(readr)"
+"2","package ‘readr’ was built under R version 3.2.5"
+"0","hours <- read_csv(""~/Downloads/business_hours.jpg"")"
+"2","Missing column names filled in: 'X1' [1]"
+"2","Parsed with column specification:
+cols(
+  X1 = col_integer(),
+  business_id = col_character(),
+  hours = col_double()
+)
+"
+"0","yelp_business <- suppressWarnings(read_csv(""~/Desktop/yelp_academic_dataset_business_train.csv""))"
+"2","Parsed with column specification:
+cols(
+  X1 = col_integer(),
+  neighborhood = col_character(),
+  business_id = col_character(),
+  hours = col_character(),
+  is_open = col_integer(),
+  address = col_character(),
+  attributes = col_character(),
+  categories = col_character(),
+  city = col_character(),
+  review_count = col_integer(),
+  name = col_character(),
+  longitude = col_double(),
+  state = col_character(),
+  stars = col_double(),
+  latitude = col_double(),
+  postal_code = col_integer(),
+  type = col_character()
+)
+"
